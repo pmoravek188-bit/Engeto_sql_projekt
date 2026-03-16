@@ -1,7 +1,7 @@
 -- Projekt SQL (PostgreSQL)
--- Q5: Ma vyska HDP vliv na zmeny ve mzdach a cenach potravin?
---     (CR v secondary) a porovnani YoY HDP vs YoY mzdy/ceny
---     ve stejnem roce i s posunem o 1 rok.
+-- Q5: Má výška HDP vliv na změny ve mzdách a cenách potravin?
+--     (ČR v secondary) a porovnání YoY HDP vs YoY mzdy/ceny
+--     ve stejném roce i s posunem o 1 rok.
 -- Autor: Patrik Moravek
 
 WITH
@@ -69,7 +69,7 @@ SELECT
     ROUND(mezirocni_zmena_hdp_pct::numeric, 2) AS mezirocni_zmena_hdp_pct,
     ROUND(mezirocni_zmena_mzdy_pct::numeric, 2) AS mezirocni_zmena_mzdy_pct,
     ROUND(mezirocni_zmena_cen_pct::numeric, 2) AS mezirocni_zmena_cen_pct,
-    -- posun o 1 rok (HDP v roce t vs mzdy/ceny v roce t+1)
+    -- Posun o 1 rok (HDP v roce t vs mzdy/ceny v roce t+1)
     ROUND(LEAD(mezirocni_zmena_mzdy_pct) OVER (ORDER BY rok)::numeric, 2) AS mezirocni_zmena_mzdy_pct_dalsi_rok,
     ROUND(LEAD(mezirocni_zmena_cen_pct) OVER (ORDER BY rok)::numeric, 2) AS mezirocni_zmena_cen_pct_dalsi_rok
 FROM mezirocne

@@ -1,9 +1,9 @@
 -- Projekt SQL (PostgreSQL)
--- Q1: Rostou v prubehu let mzdy ve vsech odvetvich, nebo v nekterych klesaji?
--- Vystup: mezirocni zmena mezd (YoY %) po odvetvi.
+-- Q1: Rostou v průběhu let mzdy ve všech odvětvích, nebo v některých klesají?
+-- Výstup: meziroční změna mezd (YoY %) po odvětví.
 -- Autor: Patrik Moravek
 
--- Hlavni vystup: mezirocni zmena mezd po odvetvi
+-- Hlavní výstup: meziroční změna mezd po odvětví
 WITH mzdy AS (
     SELECT
         rok,
@@ -33,7 +33,7 @@ FROM mezirocne
 WHERE prumerna_mzda_minuly_rok IS NOT NULL
 ORDER BY nazev_odvetvi, rok;
 
--- Rychly prehled: odvetvi a pocet poklesu
+-- Rychlý přehled: odvětví a počet poklesů
 WITH mzdy AS (
     SELECT
         rok,

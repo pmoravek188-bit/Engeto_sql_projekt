@@ -1,8 +1,8 @@
 -- Projekt SQL (PostgreSQL)
--- Q2: Kolik je mozne si koupit litru mleka a kilogramu chleba
---     za prvni a posledni srovnatelne obdobi?
--- Pozn.: Identifikace kategorii podle nazvu (LIKE). Pokud nazvy v DB nesedi,
---        nahrad rucne kod_potraviny.
+-- Q2: Kolik je možné si koupit litrů mléka a kilogramů chleba
+--     za první a poslední srovnatelné období?
+-- Pozn.: Identifikace kategorií podle názvu (LIKE). Pokud názvy v DB nesedí,
+--        nahraď ručně kod_potraviny.
 -- Autor: Patrik Moravek
 
 WITH zaklad AS (
@@ -18,7 +18,7 @@ WITH zaklad AS (
         prumerna_cena_czk,
         kupni_sila_jednotek
     FROM t_Patrik_Moravek_project_SQL_primary_final
-    WHERE kod_odvetvi IS NULL -- Vsechna odvetvi
+    WHERE kod_odvetvi IS NULL -- Všechna odvětví
 ),
 prvni_posledni AS (
     SELECT MIN(rok) AS prvni_rok, MAX(rok) AS posledni_rok

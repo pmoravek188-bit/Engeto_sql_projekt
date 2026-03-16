@@ -1,6 +1,6 @@
 -- Projekt SQL (PostgreSQL)
--- Q3: Ktera kategorie potravin zdrazuje nejpomaleji?
---     (nejnizsi prumerny mezirocni percentualni narust)
+-- Q3: Která kategorie potravin zdražuje nejpomaleji?
+--     (nejnižší průměrný meziroční procentuální nárůst)
 -- Autor: Patrik Moravek
 
 WITH ceny AS (

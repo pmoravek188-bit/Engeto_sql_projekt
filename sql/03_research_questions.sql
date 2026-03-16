@@ -1,12 +1,12 @@
 -- Projekt SQL (PostgreSQL)
--- Vyzkumne otazky - datove podklady z finalnich tabulek
+-- Výzkumné otázky - datové podklady z finálních tabulek
 -- Autor: Patrik Moravek
 --
--- Dotazy jsou rozdeleny do jednotlivych souboru:
---   sql/03_q1_mzdy_mezirocni.sql   - Q1: Rostou mzdy ve vsech odvetvich?
---   sql/03_q2_mleko_chleb.sql      - Q2: Kupni sila mleka a chleba (prvni/posledni obdobi)
---   sql/03_q3_zdrazovani_potravin.sql - Q3: Ktera potravina zdrazuje nejpomaleji?
---   sql/03_q4_ceny_vs_mzdy.sql     - Q4: Rok s vyrazne vetsim rustem cen nez mezd (>10 p.b.)
---   sql/03_q5_hdp_vliv.sql         - Q5: Vliv HDP na mzdy a ceny (CR)
+-- Dotazy jsou rozděleny do jednotlivých souborů:
+--   sql/03_q1_mzdy_mezirocni.sql   - Q1: Rostou mzdy ve všech odvětvích?
+--   sql/03_q2_mleko_chleb.sql      - Q2: Kupní síla mléka a chleba (první/poslední období)
+--   sql/03_q3_zdrazovani_potravin.sql - Q3: Která potravina zdražuje nejpomaleji?
+--   sql/03_q4_ceny_vs_mzdy.sql     - Q4: Rok s výrazně větším růstem cen než mezd (>10 p.b.)
+--   sql/03_q5_hdp_vliv.sql         - Q5: Vliv HDP na mzdy a ceny (ČR)
 --
--- Spust jednotlive soubory podle potreby, nebo v poradi 03_q1 ... 03_q5.
+-- Spusť jednotlivé soubory podle potřeby, nebo v pořadí 03_q1 ... 03_q5.

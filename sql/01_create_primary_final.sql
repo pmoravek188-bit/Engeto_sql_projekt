@@ -1,22 +1,22 @@
 -- Projekt SQL (PostgreSQL)
--- Primarni finalni tabulka: mzdy + ceny potravin v CR sjednocene na spolecne roky
+-- Primární finální tabulka: mzdy + ceny potravin v ČR sjednocené na společné roky
 -- Autor: Patrik Moravek
 --
 -- ZDROJE DAT (v DB):
--- - czechia_payroll (mzdy) + ciselniky czechia_payroll_* 
+-- - czechia_payroll (mzdy) + číselníky czechia_payroll_*
 -- - czechia_price (ceny) + czechia_price_category
 --
--- Pozn.: Filtry calculation_code/value_type_code odpovidaji nejcastejsimu nastaveni datasetu
--- (calculation_code = 200, value_type_code = 5958). Pokud mas v DB jine kody,
--- uprav je podle ciselniku czechia_payroll_calculation a czechia_payroll_value_type.
+-- Pozn.: Filtry calculation_code/value_type_code odpovídají nejčastějšímu nastavení datasetu
+-- (calculation_code = 200, value_type_code = 5958). Pokud máš v DB jiné kódy,
+-- uprav je podle číselníků czechia_payroll_calculation a czechia_payroll_value_type.
 
 DROP TABLE IF EXISTS t_Patrik_Moravek_project_SQL_primary_final;
 
 CREATE TABLE t_Patrik_Moravek_project_SQL_primary_final AS
 WITH
--- 1) MZDY: prumerna hruba mzda na zamestnance
---    Bereme celou CR (region_code IS NULL).
---    industry_branch_code IS NULL casto predstavuje agregaci "vsechna odvetvi".
+-- 1) MZDY: průměrná hrubá mzda na zaměstnance
+--    Bereme celou ČR (region_code IS NULL).
+--    industry_branch_code IS NULL často představuje agregaci "všechna odvětví".
 mzdy AS (
     SELECT
         p.payroll_year AS rok,
@@ -37,7 +37,7 @@ mzdy AS (
         COALESCE(ib.name, 'Vsechna odvetvi')
 ),
 
--- 2) CENY: prumerne ceny potravin za rok (agregace pres regiony a pozorovani)
+-- 2) CENY: průměrné ceny potravin za rok (agregace přes regiony a pozorování)
 --    Rok bereme z date_from.
 ceny AS (
     SELECT
@@ -61,14 +61,14 @@ ceny AS (
         pc.price_unit
 ),
 
--- 3) SPOLECNE ROKY: prunik roku, kde mame i mzdy i ceny
+-- 3) SPOLEČNÉ ROKY: průnik roků, kde máme i mzdy i ceny
 spolecne_roky AS (
     SELECT rok FROM mzdy
     INTERSECT
     SELECT rok FROM ceny
 )
 
--- 4) Finalni dataset: join pres rok => (rok x odvetvi x potravina)
+-- 4) Finální dataset: join přes rok => (rok x odvětví x potravina)
 SELECT
     r.rok,
 
@@ -82,7 +82,7 @@ SELECT
     c.jednotka,
     ROUND(c.prumerna_cena_czk::numeric, 2) AS prumerna_cena_czk,
 
-    -- kolik jednotek (mnozstvi + jednotka) koupim za prumernou mzdu
+    -- Kolik jednotek (mnozstvi + jednotka) koupím za průměrnou mzdu
     ROUND((m.prumerna_mzda_czk / NULLIF(c.prumerna_cena_czk, 0))::numeric, 2) AS kupni_sila_jednotek
 FROM spolecne_roky r
 JOIN mzdy m
@@ -91,7 +91,7 @@ JOIN ceny c
     ON c.rok = r.rok
 ;
 
--- Doporucene indexy (volitelne)
+-- Doporučené indexy (volitelné)
 CREATE INDEX IF NOT EXISTS idx_t_pm_primary_rok ON t_Patrik_Moravek_project_SQL_primary_final(rok);
 CREATE INDEX IF NOT EXISTS idx_t_pm_primary_odvetvi ON t_Patrik_Moravek_project_SQL_primary_final(kod_odvetvi);
 CREATE INDEX IF NOT EXISTS idx_t_pm_primary_potravina ON t_Patrik_Moravek_project_SQL_primary_final(kod_potraviny);

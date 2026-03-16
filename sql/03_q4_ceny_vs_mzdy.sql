@@ -1,7 +1,7 @@
 -- Projekt SQL (PostgreSQL)
--- Q4: Existuje rok, ve kterem byl mezirocni narust cen potravin vyrazne vyssi
---     nez rust mezd (o vice nez 10 p.b.)?
---     (agregace: prumer cen napric potravinami vs mzda "Vsechna odvetvi")
+-- Q4: Existuje rok, ve kterém byl meziroční nárůst cen potravin výrazně vyšší
+--     než růst mezd (o více než 10 p.b.)?
+--     (agregace: průměr cen napříč potravinami vs mzda "Všechna odvětví")
 -- Autor: Patrik Moravek
 
 WITH mzda_vse AS (

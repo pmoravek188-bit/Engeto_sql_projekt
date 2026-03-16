@@ -1,83 +1,83 @@
-# Vysledky vyzkumu: mzdy, ceny potravin a HDP (CR)
+# Výsledky výzkumu: mzdy, ceny potravin a HDP (ČR)
 
-## Ucel dokumentu
-Tento dokument shrnuje hlavni zavery SQL analyzy nad tabulkami `t_Patrik_Moravek_project_SQL_primary_final` a `t_Patrik_Moravek_project_SQL_secondary_final`. Slouzi jako podklad pro prezentaci vysledku mimo technicky tym.
+## Účel dokumentu
+Tento dokument shrnuje hlavní závěry SQL analýzy nad tabulkami `t_Patrik_Moravek_project_SQL_primary_final` a `t_Patrik_Moravek_project_SQL_secondary_final`. Slouží jako podklad pro prezentaci výsledků mimo technický tým.
 
-## Datovy ramec a omezeni
-- Srovnatelne obdobi mezd a cen: `2006-2018`.
-- Mzdy: prumerna hruba mzda (prepocteny stav), 19 odvetvi + agregace za CR.
-- Ceny: rocni prumery cen potravin podle kategorii.
-- Pro mezirocni srovnani cen je pouzit konzistentni pristup, aby nebyly vysledky zkreslene kategoriemi bez cele casove rady.
+## Datový rámec a omezení
+- Srovnatelné období mezd a cen: `2006-2018`.
+- Mzdy: průměrná hrubá mzda (přepočtený stav), 19 odvětví + agregace za ČR.
+- Ceny: roční průměry cen potravin podle kategorií.
+- Pro meziroční srovnání cen je použit konzistentní přístup, aby nebyly výsledky zkreslené kategoriemi bez celé časové řady.
 
-Tento ramec zajistuje, ze porovnavame stejne obdobi a stejnou datovou zakladnu napric otazkami.
+Tento rámec zajišťuje, že porovnáváme stejné období a stejnou datovou základnu napříč otázkami.
 
-## 1) Rostou mzdy ve vsech odvetvich?
-**Zaver:** Ano, dlouhodobe mzdy rostou ve vsech 19 odvetvich.
+## 1) Rostou mzdy ve všech odvětvích?
+**Závěr:** Ano, dlouhodobě mzdy rostou ve všech 19 odvětvích.
 
-Hlavni poznatky:
-- V roce 2018 nema zadne odvetvi nizsi mzdu nez v roce 2006.
-- V nekterych odvetvich se objevuji kratkodobe mezirocni poklesy.
+Hlavní poznatky:
+- V roce 2018 nemá žádné odvětví nižší mzdu než v roce 2006.
+- V některých odvětvích se objevují krátkodobé meziroční poklesy.
 
-Odvetvi s nejcastejsimi poklesy:
-- B - Tezba a dobyvani (4 zaporne roky)
-- D - Vyroba a rozvod elektriny/plynu/tepla (3)
-- M - Profesionalni, vedecke a technicke cinnosti (2)
-- O - Verejna sprava a obrana (2)
-- L - Cinnosti v oblasti nemovitosti (2)
+Odvětví s nejčastějšími poklesy:
+- B - Těžba a dobývání (4 záporné roky)
+- D - Výroba a rozvod elektřiny/plynu/tepla (3)
+- M - Profesionální, vědecké a technické činnosti (2)
+- O - Veřejná správa a obrana (2)
+- L - Činnosti v oblasti nemovitostí (2)
 
 Interpretace:
-Kratkodoba volatilita existuje, ale dlouhodoby trend mezd je jednoznacne rustovy.
+Krátkodobá volatilita existuje, ale dlouhodobý trend mezd je jednoznačně růstový.
 
-## 2) Kolik mleka a chleba lze koupit za prumernou mzdu?
-**Zaver:** Kupni sila vuci chlebu i mleku vzrostla.
+## 2) Kolik mléka a chleba lze koupit za průměrnou mzdu?
+**Závěr:** Kupní síla vůči chlebu i mléku vzrostla.
 
-Vypocet je zalozen na agregovane mzde za CR (`kod_odvetvi IS NULL`).
+Výpočet je založen na agregované mzdě za ČR (`kod_odvetvi IS NULL`).
 
-Vysledky:
+Výsledky:
 - `2006`
-- Chleb: `1211.91 kg`
-- Mleko: `1352.91 l`
+- Chléb: `1211.91 kg`
+- Mléko: `1352.91 l`
 - `2018`
-- Chleb: `1321.91 kg`
-- Mleko: `1616.70 l`
+- Chléb: `1321.91 kg`
+- Mléko: `1616.70 l`
 
 Interpretace:
-Kupni sila se v obou sledovanych komoditach zlepsila, vyrazneji u mleka.
+Kupní síla se v obou sledovaných komoditách zlepšila, výrazněji u mléka.
 
-## 3) Ktera potravina zdrazuje nejpomaleji?
-**Zaver:** Nejpomalejsi rust (v prumeru dokonce pokles) vykazal krystalovy cukr.
+## 3) Která potravina zdražuje nejpomaleji?
+**Závěr:** Nejpomalejší růst (v průměru dokonce pokles) vykázal krystalový cukr.
 
-Nejpomalejsi prumerne mezirocni zmeny:
-1. Cukr krystalovy: `-1.92 % rocne`
-2. Rajska jablka: `-0.74 % rocne`
-3. Banany zlate: `+0.81 % rocne`
-4. Veprova pecene s kosti: `+0.99 % rocne`
-5. Mineralni voda: `+1.03 % rocne`
-
-Interpretace:
-Ne vsechny potraviny dlouhodobe zdrazuji stejnym tempem; cast kategorii rostla velmi pomalu, nebo i klesala.
-
-## 4) Byl nektery rok, kdy ceny rostly o vice nez 10 p.b. rychleji nez mzdy?
-**Zaver:** Ne.
-
-V analyzovanem obdobi nebyl identifikovan zadny rok, kdy by rozdil `(mezirocni rust cen - mezirocni rust mezd)` prekrocil hranici 10 procentnich bodu.
+Nejpomalejší průměrné meziroční změny:
+1. Cukr krystalový: `-1.92 % ročně`
+2. Rajská jablka: `-0.74 % ročně`
+3. Banány žluté: `+0.81 % ročně`
+4. Vepřová pečeně s kostí: `+0.99 % ročně`
+5. Minerální voda: `+1.03 % ročně`
 
 Interpretace:
-Ceny potravin sice mohly v jednotlivych letech rust rychleji nez mzdy, ale ne natolik vyrazne, aby splnily zadane kriterium.
+Ne všechny potraviny dlouhodobě zdražují stejným tempem; část kategorií rostla velmi pomalu, nebo i klesala.
+
+## 4) Byl některý rok, kdy ceny rostly o více než 10 p.b. rychleji než mzdy?
+**Závěr:** Ne.
+
+V analyzovaném období nebyl identifikován žádný rok, kdy by rozdíl `(meziroční růst cen - meziroční růst mezd)` překročil hranici 10 procentních bodů.
+
+Interpretace:
+Ceny potravin sice mohly v jednotlivých letech růst rychleji než mzdy, ale ne natolik výrazně, aby splnily zadané kritérium.
 
 ## 5) Vliv HDP na mzdy a ceny
-**Zaver:** Vazba HDP je vyraznejsi u mezd nez u cen potravin, a to zejmena s rocni prodlevou.
+**Závěr:** Vazba HDP je výraznější u mezd než u cen potravin, a to zejména s roční prodlevou.
 
-Korelace mezi rustem HDP a dalsimi velicinami:
-- HDP vs mzdy (stejny rok): `0.486`
-- HDP vs ceny (stejny rok): `0.413`
-- HDP vs mzdy (nasledujici rok): `0.744`
-- HDP vs ceny (nasledujici rok): `0.084`
+Korelace mezi růstem HDP a dalšími veličinami:
+- HDP vs mzdy (stejný rok): `0.486`
+- HDP vs ceny (stejný rok): `0.413`
+- HDP vs mzdy (následující rok): `0.744`
+- HDP vs ceny (následující rok): `0.084`
 
 Interpretace:
-- Rust HDP je zretelneji spojen s nasledujicim rustem mezd.
-- Vazba mezi HDP a cenami potravin je slabsi.
-- Korelace neimplikuje kauzalitu; jde o statisticke souvislosti, ne dukaz prime priciny.
+- Růst HDP je zřetelněji spojen s následujícím růstem mezd.
+- Vazba mezi HDP a cenami potravin je slabší.
+- Korelace neimplikuje kauzalitu; jde o statistické souvislosti, ne důkaz přímé příčiny.
 
-## Zaverecne shrnuti
-Data podporuji tezi, ze ve sledovanem obdobi rostly mzdy napric odvetvimi a kupni sila u zakladnich potravin se zlepsila. Vyvoj cen potravin nebyl jednotny a neukazal se rok s extremnim odtrzenim rustu cen od rustu mezd nad stanovenou hranici. Vliv HDP se projevil vice u mzdove dynamiky nez u cen potravin.
+## Závěrečné shrnutí
+Data podporují tezi, že ve sledovaném období rostly mzdy napříč odvětvími a kupní síla u základních potravin se zlepšila. Vývoj cen potravin nebyl jednotný a neukázal se rok s extrémním odtržením růstu cen od růstu mezd nad stanovenou hranicí. Vliv HDP se projevil více u mzdové dynamiky než u cen potravin.

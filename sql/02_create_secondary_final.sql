@@ -1,5 +1,5 @@
 -- Projekt SQL (PostgreSQL)
--- Secondary finalni tabulka: evropske staty (HDP, GINI, populace) ve stejnem obdobi jako primary tabulka
+-- Secondary finální tabulka: evropské státy (HDP, GINI, populace) ve stejném období jako primary tabulka
 -- Autor: Patrik Moravek
 --
 -- ZDROJE DAT (v DB):
@@ -10,13 +10,13 @@ DROP TABLE IF EXISTS t_Patrik_Moravek_project_SQL_secondary_final;
 
 CREATE TABLE t_Patrik_Moravek_project_SQL_secondary_final AS
 WITH
--- roky, ktere jsou v primary (spolecne roky mezd a cen)
+-- Roky, které jsou v primary (společné roky mezd a cen)
 roky_primary AS (
     SELECT DISTINCT rok
     FROM t_Patrik_Moravek_project_SQL_primary_final
 ),
 
--- evropske staty (kontinent Europe) + jen roky z primary
+-- Evropské státy (kontinent Europe) + jen roky z primary
 evropa AS (
     SELECT
         e.year AS rok,
