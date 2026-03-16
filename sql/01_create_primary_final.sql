@@ -15,7 +15,6 @@ DROP TABLE IF EXISTS t_Patrik_Moravek_project_SQL_primary_final;
 CREATE TABLE t_Patrik_Moravek_project_SQL_primary_final AS
 WITH
 -- 1) MZDY: průměrná hrubá mzda na zaměstnance
---    Bereme celou ČR (region_code IS NULL).
 --    industry_branch_code IS NULL často představuje agregaci "všechna odvětví".
 mzdy AS (
     SELECT
@@ -30,7 +29,7 @@ mzdy AS (
         AND p.value IS NOT NULL
         AND p.calculation_code = 200
         AND p.value_type_code = 5958
-        AND p.region_code IS NULL
+        AND p.unit_code = 200
     GROUP BY
         p.payroll_year,
         p.industry_branch_code,

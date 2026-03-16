@@ -1,8 +1,8 @@
 -- Projekt SQL (PostgreSQL)
 -- Q2: Kolik je možné si koupit litrů mléka a kilogramů chleba
 --     za první a poslední srovnatelné období?
--- Pozn.: Identifikace kategorií podle názvu (LIKE). Pokud názvy v DB nesedí,
---        nahraď ručně kod_potraviny.
+-- Pozn.: Použity jsou konkrétní kódy kategorií z czechia_price_category:
+--        114201 = Mléko polotučné pasterované, 111301 = Chléb konzumní kmínový.
 -- Autor: Patrik Moravek
 
 WITH zaklad AS (
@@ -27,13 +27,7 @@ prvni_posledni AS (
 vyber AS (
     SELECT z.*
     FROM zaklad z
-    WHERE (
-        LOWER(z.nazev_potraviny) LIKE '%ml%c%ko%'
-        OR LOWER(z.nazev_potraviny) LIKE '%mleko%'
-        OR LOWER(z.nazev_potraviny) LIKE '%milk%'
-        OR LOWER(z.nazev_potraviny) LIKE '%chleb%'
-        OR LOWER(z.nazev_potraviny) LIKE '%bread%'
-    )
+    WHERE z.kod_potraviny IN (114201, 111301)
 )
 SELECT
     v.kod_potraviny,

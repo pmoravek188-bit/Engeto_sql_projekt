@@ -42,7 +42,7 @@ Doporučené pořadí:
 Soubor `sql/03_research_questions.sql` slouží jako přehled mapování dotazů na jednotlivé výzkumné otázky.
 
 ## Metodické poznámky
-- Mzdy jsou filtrované na standardní kombinaci kódů (`calculation_code = 200`, `value_type_code = 5958`) a na celou ČR (`region_code IS NULL`).
+- Mzdy jsou filtrované na standardní kombinaci kódů (`calculation_code = 200`, `value_type_code = 5958`, `unit_code = 200`). Datová sada mezd je vedena na úrovni celé ČR.
 - Ceny jsou agregované na roční průměr podle kategorie potravin.
 - Finální primary tabulka je postavena na průniku roků, kde existují zároveň data mezd i cen.
 - U kupní síly je výpočet `prumerna_mzda_czk / prumerna_cena_czk`.

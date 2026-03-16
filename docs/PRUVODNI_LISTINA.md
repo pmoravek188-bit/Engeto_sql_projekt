@@ -24,7 +24,8 @@ Připravit datové podklady pro porovnání dostupnosti potravin na základě pr
 ### Transformace – primary tabulka
 - **Mzdy**
   - filtr: `calculation_code = 200` a `value_type_code = 5958` (nejčastěji "průměrná hrubá mzda")
-  - filtr: `region_code IS NULL` jako "celá ČR" (pokud je u tebe jinak, uprav)
+  - filtr: `unit_code = 200` (Kč)
+  - data mezd jsou vedena na úrovni celé ČR (bez regionálního sloupce)
   - agregace: `AVG(value)` na úroveň **rok × odvětví**
   - `kod_odvetvi IS NULL` je vedeno jako **Všechna odvětví** (agregace)
 
@@ -45,8 +46,7 @@ Připravit datové podklady pro porovnání dostupnosti potravin na základě pr
 
 ### Limity / rizika kvality dat
 - **Kódy mezd**: pokud v DB neodpovídají `calculation_code=200` a `value_type_code=5958`, je nutné upravit filtr dle číselníků.
-- **Celá ČR**: některé implementace datasetu nemusí používat `region_code IS NULL` pro celou ČR.
-- **Otázka 2**: identifikace mléka/chleba přes název může selhat při jiném pojmenování; ideálně použít `kod_potraviny`.
+- **Otázka 2**: dotaz je navázán na konkrétní kódy potravin (`114201` mléko, `111301` chléb); při jiné verzi číselníku je nutné kódy upravit.
 - **Agregace cen**: průměr přes všechny záznamy v roce (není vážený spotřebou).
 
 ### Doporučené ověření po spuštění
