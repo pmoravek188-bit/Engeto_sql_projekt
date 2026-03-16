@@ -1,60 +1,83 @@
-# Vysledky vyzkumnych otazek (2006-2018)
+# Vysledky vyzkumu: mzdy, ceny potravin a HDP (CR)
 
-## Ramec dat
-- Spolecne obdobi mezd a cen: 2006-2018.
-- Ceny: pouzito 26 kategorii dostupnych po cele obdobi (kategorie vino zacina az 2015, proto je vyloucena).
-- Mzdy: prumerna hruba mzda (prepocteny stav), 19 odvetvi + agregace za CR (Celkem).
-Komentar: Tento ramec zajistuje srovnatelnost mezi mzdami a cenami ve stejnem casovem okne.
+## Ucel dokumentu
+Tento dokument shrnuje hlavni zaveri SQL analyzy nad tabulkami `t_Patrik_Moravek_project_SQL_primary_final` a `t_Patrik_Moravek_project_SQL_secondary_final`. Slouzi jako podklad pro prezentaci vysledku mimo technicky tym.
+
+## Datovy ramec a omezeni
+- Srovnatelne obdobi mezd a cen: `2006-2018`.
+- Mzdy: prumerna hruba mzda (prepocteny stav), 19 odvetvi + agregace za CR.
+- Ceny: rocni prumery cen potravin podle kategorii.
+- Pro mezirocni srovnani cen je pouzit konzistentni pristup, aby nebyly vysledky zkreslene kategoriemi bez cele casove rady.
+
+Tento ramec zajistuje, ze porovnavame stejne obdobi a stejnou datovou zakladnu napric otazkami.
 
 ## 1) Rostou mzdy ve vsech odvetvich?
-**Zaver:** Ano, dlouhodobe rostou ve vsech 19 odvetvich.
-- Zadne odvetvi nema v roce 2018 nizsi mzdu nez v roce 2006.
-- Existuji ale kratkodobe mezirocni poklesy v nekterych oborech.
-Komentar: Kratkodobe poklesy nezpochybnuji dlouhodoby rust, jen ukazuji volatilitu v nekterych odvetvich.
+**Zaver:** Ano, dlouhodobe mzdy rostou ve vsech 19 odvetvich.
 
-Nejcastejsi kratkodobe poklesy:
-- B Tazba a dobyvani (4 zaporne roky)
-- D Vyroba a rozvod elektriny/plynu/tepla (3 zaporne roky)
-- M Profesionalni, vedecke a technicke cinnosti (2)
-- O Verejna sprava a obrana (2)
-- L Cinnosti v oblasti nemovitosti (2)
+Hlavni poznatky:
+- V roce 2018 nema zadne odvetvi nizsi mzdu nez v roce 2006.
+- V nekterych odvetvich se objevuji kratkodobe mezirocni poklesy.
 
-## 2) Kolik mleka a chleba lze koupit za prumernou mzdu?
-**Zaver:** Kupni sila vuci mleku i chlebu vzrostla.
-
-- 2006:
-  - Chleb: 1211.91 kg
-  - Mleko: 1352.91 l
-- 2018:
-  - Chleb: 1321.91 kg
-  - Mleko: 1616.70 l
-Komentar: Vypocet pouziva prumernou mzdu CR (radek Celkem). Jednotky odpovidaji price_value/price_unit.
-
-## 3) Ktera kategorie zdrazuje nejpomaleji?
-**Zaver:** Nejpomaleji rostl (a v prumeru dokonce klesal) cukr krystalovy.
-Komentar: Porovnani je omezeno na kategorie s kompletnimi daty v letech 2006-2018.
-
-Nejpomalejsi prumerne mezirocni zmeny:
-1. Cukr krystalovy: -1.92 % rocne
-2. Rajska jablka: -0.74 % rocne
-3. Banany zlate: +0.81 % rocne
-4. Veprova pecene s kosti: +0.99 % rocne
-5. Mineralni voda: +1.03 % rocne
-
-## 4) Existuje rok s rustem cen > 10 p.b. nad rust mezd?
-**Zaver:** Ne.
-- V zadnem roce nebyl rozdil (rust cen - rust mezd) vyssi nez 10 procentnich bodu.
-Komentar: Index cen potravin je nevazeny prumer cen kategorii (jednoducha aritmetika).
-
-## 5) Vliv HDP na mzdy a ceny (korelace rustu)
-**Zaver:** Vyraznejsi vztah je u mezd, hlavne s rocni prodlevou.
-
-- HDP vs mzdy (stejny rok): 0.486
-- HDP vs ceny (stejny rok): 0.413
-- HDP vs mzdy (nasledujici rok): 0.744
-- HDP vs ceny (nasledujici rok): 0.084
+Odvetvi s nejcastejsimi poklesy:
+- B - Tezba a dobyvani (4 zaporne roky)
+- D - Vyroba a rozvod elektriny/plynu/tepla (3)
+- M - Profesionalni, vedecke a technicke cinnosti (2)
+- O - Verejna sprava a obrana (2)
+- L - Cinnosti v oblasti nemovitosti (2)
 
 Interpretace:
-- Rust HDP se projevi spise na mzdach (a casto az v nasledujicim roce).
-- Vliv HDP na ceny potravin je slabsi.
-Komentar: Korelace neimplikuje kauzalitu; jde pouze o soubezny pohyb mezirocnich zmen.
+Kratkodoba volatilita existuje, ale dlouhodoby trend mezd je jednoznacne rustovy.
+
+## 2) Kolik mleka a chleba lze koupit za prumernou mzdu?
+**Zaver:** Kupni sila vuci chlebu i mleku vzrostla.
+
+Vypocet je zalozen na agregovane mzde za CR (`kod_odvetvi IS NULL`).
+
+Vysledky:
+- `2006`
+- Chleb: `1211.91 kg`
+- Mleko: `1352.91 l`
+- `2018`
+- Chleb: `1321.91 kg`
+- Mleko: `1616.70 l`
+
+Interpretace:
+Kupni sila se v obou sledovanych komoditach zlepsila, vyrazneji u mleka.
+
+## 3) Ktera potravina zdrazuje nejpomaleji?
+**Zaver:** Nejpomalejsi rust (v prumeru dokonce pokles) vykazal krystalovy cukr.
+
+Nejpomalejsi prumerne mezirocni zmeny:
+1. Cukr krystalovy: `-1.92 % rocne`
+2. Rajska jablka: `-0.74 % rocne`
+3. Banany zlate: `+0.81 % rocne`
+4. Veprova pecene s kosti: `+0.99 % rocne`
+5. Mineralni voda: `+1.03 % rocne`
+
+Interpretace:
+Ne vsechny potraviny dlouhodobe zdrazuji stejnym tempem; cast kategorii rostla velmi pomalu, nebo i klesala.
+
+## 4) Byl nektery rok, kdy ceny rostly o vice nez 10 p.b. rychleji nez mzdy?
+**Zaver:** Ne.
+
+V analyzovanem obdobi nebyl identifikovan zadny rok, kdy by rozdil `(mezirocni rust cen - mezirocni rust mezd)` prekrocil hranici 10 procentnich bodu.
+
+Interpretace:
+Ceny potravin sice mohly v jednotlivych letech rust rychleji nez mzdy, ale ne natolik vyrazne, aby splnily zadane kriterium.
+
+## 5) Vliv HDP na mzdy a ceny
+**Zaver:** Vazba HDP je vyraznejsi u mezd nez u cen potravin, a to zejmena s rocni prodlevou.
+
+Korelace mezi rustem HDP a dalsimi velicinami:
+- HDP vs mzdy (stejny rok): `0.486`
+- HDP vs ceny (stejny rok): `0.413`
+- HDP vs mzdy (nasledujici rok): `0.744`
+- HDP vs ceny (nasledujici rok): `0.084`
+
+Interpretace:
+- Rust HDP je zretelneji spojen s nasledujicim rustem mezd.
+- Vazba mezi HDP a cenami potravin je slabsi.
+- Korelace neimplikuje kauzalitu; jde o statisticke souvislosti, ne dukaz prime priciny.
+
+## Zaverecne shrnuti
+Data podporuji tezi, ze ve sledovanem obdobi rostly mzdy napric odvetvimi a kupni sila u zakladnich potravin se zlepsila. Vyvoj cen potravin nebyl jednotny a neukazal se rok s extremnim odtrzenim rustu cen od rustu mezd nad stanovenou hranici. Vliv HDP se projevil vice u mzdove dynamiky nez u cen potravin.
