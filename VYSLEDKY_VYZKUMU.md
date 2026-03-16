@@ -1,7 +1,7 @@
 # Vysledky vyzkumu: mzdy, ceny potravin a HDP (CR)
 
 ## Ucel dokumentu
-Tento dokument shrnuje hlavni zaveri SQL analyzy nad tabulkami `t_Patrik_Moravek_project_SQL_primary_final` a `t_Patrik_Moravek_project_SQL_secondary_final`. Slouzi jako podklad pro prezentaci vysledku mimo technicky tym.
+Tento dokument shrnuje hlavni zavery SQL analyzy nad tabulkami `t_Patrik_Moravek_project_SQL_primary_final` a `t_Patrik_Moravek_project_SQL_secondary_final`. Slouzi jako podklad pro prezentaci vysledku mimo technicky tym.
 
 ## Datovy ramec a omezeni
 - Srovnatelne obdobi mezd a cen: `2006-2018`.

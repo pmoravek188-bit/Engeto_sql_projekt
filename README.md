@@ -1,7 +1,7 @@
 # Engeto SQL projekt
 
 ## O projektu
-Tento repozitar obsahuje SQL projekt zamereny na porovnani vyvoje mezd a cen zakladnich potravin v Ceske republice. Cil je pripravit robustni datovy zaklad pro odpoved na vyzkumne otazky o dostupnosti potravin a doplnit jej o makroekonomicky kontext evropskych statu.
+Tento repozitar obsahuje SQL projekt zamereny na porovnani vyvoje mezd a cen zakladnich potravin v Ceske republice. Cil je pripravit robustni datovy zaklad pro odpovedi na vyzkumne otazky o dostupnosti potravin a doplnit jej o makroekonomicky kontext evropskych statu.
 
 Projekt je navrzen tak, aby byl snadno reprodukovatelny: od vytvoreni vystupnich tabulek az po dotazy, ktere generuji podklady pro interpretaci vysledku.
 
@@ -24,7 +24,7 @@ Skripty vytvareji dve finalni tabulky:
 - `t_Patrik_Moravek_project_SQL_secondary_final`
 
 `primary_final` obsahuje data mezd a cen ve spolecnem casovem okne.
-Granularita: `rok x odvetvi x kategorie potraviny`.
+Granularita: `rok x odvetvi x kategorie potravin`.
 
 `secondary_final` obsahuje evropske staty se sloupci `rok`, `stat`, `kontinent`, `hdp`, `gini`, `populace`, omezene na stejne roky jako primary tabulka.
 
