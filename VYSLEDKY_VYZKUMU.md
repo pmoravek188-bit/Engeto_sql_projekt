@@ -6,8 +6,8 @@ Tento dokument shrnuje hlavní závěry SQL analýzy nad tabulkami `t_Patrik_Mor
 ## Datový rámec a omezení
 - Srovnatelné období mezd a cen: `2006-2018`.
 - Mzdy: průměrná hrubá mzda (přepočtený stav), 19 odvětví + agregace za ČR.
-- Ceny: roční průměry cen potravin podle kategorií.
-- Pro meziroční srovnání cen je použit konzistentní přístup, aby nebyly výsledky zkreslené kategoriemi bez celé časové řady.
+- Ceny: roční průměry cen potravin z národního průměru (`region_code IS NULL`).
+- Pro meziroční srovnání cen je použit konzistentní přístup: Q3-Q5 pracují s 26 kategoriemi dostupnými po celé časové období.
 
 Tento rámec zajišťuje, že porovnáváme stejné období a stejnou datovou základnu napříč otázkami.
 
@@ -22,8 +22,8 @@ Odvětví s nejčastějšími poklesy:
 - B - Těžba a dobývání (4 záporné roky)
 - D - Výroba a rozvod elektřiny/plynu/tepla (3)
 - M - Profesionální, vědecké a technické činnosti (2)
+- I - Ubytování, stravování a pohostinství (2)
 - O - Veřejná správa a obrana (2)
-- L - Činnosti v oblasti nemovitostí (2)
 
 Interpretace:
 Krátkodobá volatilita existuje, ale dlouhodobý trend mezd je jednoznačně růstový.
@@ -35,11 +35,11 @@ Výpočet je založen na agregované mzdě za ČR (`kod_odvetvi IS NULL`).
 
 Výsledky:
 - `2006`
-- Chléb: `1211.91 kg`
-- Mléko: `1352.91 l`
+- Chléb: `1211.66 kg`
+- Mléko: `1353.10 l`
 - `2018`
-- Chléb: `1321.91 kg`
-- Mléko: `1616.70 l`
+- Chléb: `1322.00 kg`
+- Mléko: `1616.77 l`
 
 Interpretace:
 Kupní síla se v obou sledovaných komoditách zlepšila, výrazněji u mléka.
@@ -71,8 +71,8 @@ Ceny potravin sice mohly v jednotlivých letech růst rychleji než mzdy, ale ne
 Korelace mezi růstem HDP a dalšími veličinami:
 - HDP vs mzdy (stejný rok): `0.486`
 - HDP vs ceny (stejný rok): `0.413`
-- HDP vs mzdy (následující rok): `0.744`
-- HDP vs ceny (následující rok): `0.084`
+- HDP vs mzdy (následující rok): `0.700`
+- HDP vs ceny (následující rok): `-0.038`
 
 Interpretace:
 - Růst HDP je zřetelněji spojen s následujícím růstem mezd.

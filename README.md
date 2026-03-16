@@ -18,6 +18,8 @@ Projekt využívá tabulky dostupné v databázi akademie:
 - `czechia_price`, `czechia_price_category`
 - `countries`, `economies`
 
+Skripty pracují explicitně se schématem `data_academy_content`.
+
 ## Výstupní tabulky
 Skripty vytvářejí dvě finální tabulky:
 - `t_Patrik_Moravek_project_SQL_primary_final`
@@ -43,7 +45,7 @@ Soubor `sql/03_research_questions.sql` slouží jako přehled mapování dotazů
 
 ## Metodické poznámky
 - Mzdy jsou filtrované na standardní kombinaci kódů (`calculation_code = 200`, `value_type_code = 5958`, `unit_code = 200`). Datová sada mezd je vedena na úrovni celé ČR.
-- Ceny jsou agregované na roční průměr podle kategorie potravin.
+- Ceny jsou agregované na roční průměr podle kategorie potravin z národního průměru (`region_code IS NULL`).
 - Finální primary tabulka je postavena na průniku roků, kde existují zároveň data mezd i cen.
 - U kupní síly je výpočet `prumerna_mzda_czk / prumerna_cena_czk`.
 

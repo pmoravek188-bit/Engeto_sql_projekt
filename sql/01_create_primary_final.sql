@@ -10,9 +10,9 @@
 -- (calculation_code = 200, value_type_code = 5958). Pokud máš v DB jiné kódy,
 -- uprav je podle číselníků czechia_payroll_calculation a czechia_payroll_value_type.
 
-DROP TABLE IF EXISTS t_Patrik_Moravek_project_SQL_primary_final;
+DROP TABLE IF EXISTS data_academy_content.t_Patrik_Moravek_project_SQL_primary_final;
 
-CREATE TABLE t_Patrik_Moravek_project_SQL_primary_final AS
+CREATE TABLE data_academy_content.t_Patrik_Moravek_project_SQL_primary_final AS
 WITH
 -- 1) MZDY: průměrná hrubá mzda na zaměstnance
 --    industry_branch_code IS NULL často představuje agregaci "všechna odvětví".
@@ -22,8 +22,8 @@ mzdy AS (
         p.industry_branch_code AS kod_odvetvi,
         COALESCE(ib.name, 'Vsechna odvetvi') AS nazev_odvetvi,
         AVG(p.value) AS prumerna_mzda_czk
-    FROM czechia_payroll p
-    LEFT JOIN czechia_payroll_industry_branch ib
+    FROM data_academy_content.czechia_payroll p
+    LEFT JOIN data_academy_content.czechia_payroll_industry_branch ib
         ON ib.code = p.industry_branch_code
     WHERE 1=1
         AND p.value IS NOT NULL
@@ -46,12 +46,13 @@ ceny AS (
         pc.price_value AS mnozstvi,
         pc.price_unit AS jednotka,
         AVG(cp.value) AS prumerna_cena_czk
-    FROM czechia_price cp
-    JOIN czechia_price_category pc
+    FROM data_academy_content.czechia_price cp
+    JOIN data_academy_content.czechia_price_category pc
         ON pc.code = cp.category_code
     WHERE 1=1
         AND cp.value IS NOT NULL
         AND cp.category_code IS NOT NULL
+        AND cp.region_code IS NULL
     GROUP BY
         EXTRACT(YEAR FROM cp.date_from)::int,
         cp.category_code,
@@ -91,6 +92,6 @@ JOIN ceny c
 ;
 
 -- Doporučené indexy (volitelné)
-CREATE INDEX IF NOT EXISTS idx_t_pm_primary_rok ON t_Patrik_Moravek_project_SQL_primary_final(rok);
-CREATE INDEX IF NOT EXISTS idx_t_pm_primary_odvetvi ON t_Patrik_Moravek_project_SQL_primary_final(kod_odvetvi);
-CREATE INDEX IF NOT EXISTS idx_t_pm_primary_potravina ON t_Patrik_Moravek_project_SQL_primary_final(kod_potraviny);
+CREATE INDEX IF NOT EXISTS idx_t_pm_primary_rok ON data_academy_content.t_Patrik_Moravek_project_SQL_primary_final(rok);
+CREATE INDEX IF NOT EXISTS idx_t_pm_primary_odvetvi ON data_academy_content.t_Patrik_Moravek_project_SQL_primary_final(kod_odvetvi);
+CREATE INDEX IF NOT EXISTS idx_t_pm_primary_potravina ON data_academy_content.t_Patrik_Moravek_project_SQL_primary_final(kod_potraviny);

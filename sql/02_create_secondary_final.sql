@@ -6,14 +6,14 @@
 -- - economies (HDP, GINI, populace)
 -- - countries (kontinent)
 
-DROP TABLE IF EXISTS t_Patrik_Moravek_project_SQL_secondary_final;
+DROP TABLE IF EXISTS data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final;
 
-CREATE TABLE t_Patrik_Moravek_project_SQL_secondary_final AS
+CREATE TABLE data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final AS
 WITH
 -- Roky, které jsou v primary (společné roky mezd a cen)
 roky_primary AS (
     SELECT DISTINCT rok
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
 ),
 
 -- Evropské státy (kontinent Europe) + jen roky z primary
@@ -25,8 +25,8 @@ evropa AS (
         e.GDP AS hdp,
         e.gini AS gini,
         e.population AS populace
-    FROM economies e
-    JOIN countries c
+    FROM data_academy_content.economies e
+    JOIN data_academy_content.countries c
         ON c.country = e.country
     JOIN roky_primary rp
         ON rp.rok = e.year
@@ -43,5 +43,5 @@ SELECT
 FROM evropa
 ;
 
-CREATE INDEX IF NOT EXISTS idx_t_pm_secondary_rok ON t_Patrik_Moravek_project_SQL_secondary_final(rok);
-CREATE INDEX IF NOT EXISTS idx_t_pm_secondary_stat ON t_Patrik_Moravek_project_SQL_secondary_final(stat);
+CREATE INDEX IF NOT EXISTS idx_t_pm_secondary_rok ON data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final(rok);
+CREATE INDEX IF NOT EXISTS idx_t_pm_secondary_stat ON data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final(stat);

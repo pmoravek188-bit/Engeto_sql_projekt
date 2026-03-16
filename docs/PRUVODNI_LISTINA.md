@@ -8,6 +8,8 @@ Použité tabulky:
 - `czechia_price` + `czechia_price_category` (ceny potravin)
 - `economies` + `countries` (HDP, GINI, populace)
 
+Všechny SQL skripty používají explicitně schéma `data_academy_content`.
+
 ### Cíl
 Připravit datové podklady pro porovnání dostupnosti potravin na základě průměrných příjmů v čase (ČR) a dodat evropský kontext (HDP, GINI, populace).
 
@@ -31,6 +33,7 @@ Připravit datové podklady pro porovnání dostupnosti potravin na základě pr
 
 - **Ceny potravin**
   - roční agregace: `EXTRACT(YEAR FROM date_from)`
+  - filtr: `region_code IS NULL` (národní průměr)
   - agregace: `AVG(value)` na úroveň **rok × kategorie potraviny**
   - přenáší se i jednotka (`mnozstvi`, `jednotka`) z `czechia_price_category`
 
@@ -48,8 +51,9 @@ Připravit datové podklady pro porovnání dostupnosti potravin na základě pr
 - **Kódy mezd**: pokud v DB neodpovídají `calculation_code=200` a `value_type_code=5958`, je nutné upravit filtr dle číselníků.
 - **Otázka 2**: dotaz je navázán na konkrétní kódy potravin (`114201` mléko, `111301` chléb); při jiné verzi číselníku je nutné kódy upravit.
 - **Agregace cen**: průměr přes všechny záznamy v roce (není vážený spotřebou).
+- **Srovnatelnost kategorií**: meziroční analýzy cen (Q3-Q5) pracují jen s kategoriemi dostupnými po celé časové období.
 
 ### Doporučené ověření po spuštění
-- rozsah roku v primary: `SELECT MIN(rok), MAX(rok) FROM t_Patrik_Moravek_project_SQL_primary_final;`
-- existence "Všechna odvětví": `SELECT COUNT(*) FROM t_Patrik_Moravek_project_SQL_primary_final WHERE kod_odvetvi IS NULL;`
-- existence CR v secondary: `SELECT DISTINCT stat FROM t_Patrik_Moravek_project_SQL_secondary_final WHERE LOWER(stat) LIKE 'czech%';`
+- rozsah roku v primary: `SELECT MIN(rok), MAX(rok) FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final;`
+- existence "Všechna odvětví": `SELECT COUNT(*) FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final WHERE kod_odvetvi IS NULL;`
+- existence ČR v secondary: `SELECT DISTINCT stat FROM data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final WHERE LOWER(stat) LIKE 'czech%';`

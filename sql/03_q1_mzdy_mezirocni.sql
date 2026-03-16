@@ -10,7 +10,7 @@ WITH mzdy AS (
         kod_odvetvi,
         nazev_odvetvi,
         AVG(prumerna_mzda_czk) AS prumerna_mzda_czk
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
     GROUP BY rok, kod_odvetvi, nazev_odvetvi
 ),
 mezirocne AS (
@@ -40,7 +40,7 @@ WITH mzdy AS (
         kod_odvetvi,
         nazev_odvetvi,
         AVG(prumerna_mzda_czk) AS prumerna_mzda_czk
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
     WHERE kod_odvetvi IS NOT NULL
     GROUP BY rok, kod_odvetvi, nazev_odvetvi
 ),

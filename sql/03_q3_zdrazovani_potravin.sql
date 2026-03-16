@@ -4,12 +4,25 @@
 -- Autor: Patrik Moravek
 
 WITH ceny AS (
+    WITH rok_rozsah AS (
+        SELECT MIN(rok) AS min_rok, MAX(rok) AS max_rok
+        FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
+    ),
+    plne_kategorie AS (
+        SELECT kod_potraviny
+        FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
+        GROUP BY kod_potraviny
+        HAVING MIN(rok) = (SELECT min_rok FROM rok_rozsah)
+           AND MAX(rok) = (SELECT max_rok FROM rok_rozsah)
+           AND COUNT(DISTINCT rok) = (SELECT max_rok - min_rok + 1 FROM rok_rozsah)
+    )
     SELECT
         rok,
         kod_potraviny,
         nazev_potraviny,
         AVG(prumerna_cena_czk) AS prumerna_cena_czk
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
+    WHERE kod_potraviny IN (SELECT kod_potraviny FROM plne_kategorie)
     GROUP BY rok, kod_potraviny, nazev_potraviny
 ),
 mezirocne AS (

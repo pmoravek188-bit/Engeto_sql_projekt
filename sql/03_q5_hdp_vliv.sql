@@ -1,76 +1,78 @@
 -- Projekt SQL (PostgreSQL)
 -- Q5: Má výška HDP vliv na změny ve mzdách a cenách potravin?
---     (ČR v secondary) a porovnání YoY HDP vs YoY mzdy/ceny
---     ve stejném roce i s posunem o 1 rok.
+--     Výstup: korelace růstu HDP vůči růstu mezd a cen
+--     ve stejném i následujícím roce.
 -- Autor: Patrik Moravek
 
 WITH
 nazev_cr AS (
     SELECT stat
-    FROM t_Patrik_Moravek_project_SQL_secondary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final
     WHERE LOWER(stat) IN ('czech republic', 'czechia')
     LIMIT 1
 ),
-
-cr_eko AS (
+cr_hdp AS (
     SELECT
         s.rok,
-        s.stat,
-        s.hdp,
-        LAG(s.hdp) OVER (ORDER BY s.rok) AS hdp_minuly_rok
-    FROM t_Patrik_Moravek_project_SQL_secondary_final s
+        (s.hdp / NULLIF(LAG(s.hdp) OVER (ORDER BY s.rok), 0) - 1) * 100 AS mezirocni_zmena_hdp_pct
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_secondary_final s
     JOIN nazev_cr n
         ON n.stat = s.stat
 ),
-
 cr_mzda AS (
     SELECT
         rok,
         AVG(prumerna_mzda_czk) AS prumerna_mzda_czk
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
     WHERE kod_odvetvi IS NULL
     GROUP BY rok
+),
+rok_rozsah AS (
+    SELECT MIN(rok) AS min_rok, MAX(rok) AS max_rok
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
+),
+plne_kategorie AS (
+    SELECT kod_potraviny
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
+    GROUP BY kod_potraviny
+    HAVING MIN(rok) = (SELECT min_rok FROM rok_rozsah)
+       AND MAX(rok) = (SELECT max_rok FROM rok_rozsah)
+       AND COUNT(DISTINCT rok) = (SELECT max_rok - min_rok + 1 FROM rok_rozsah)
 ),
 cr_cena AS (
     SELECT
         rok,
         AVG(prumerna_cena_czk) AS prumerna_cena_potravin_czk
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
+    WHERE kod_potraviny IN (SELECT kod_potraviny FROM plne_kategorie)
     GROUP BY rok
 ),
-
 spojene AS (
     SELECT
-        e.rok,
-        e.hdp,
-        e.hdp_minuly_rok,
-        m.prumerna_mzda_czk,
-        LAG(m.prumerna_mzda_czk) OVER (ORDER BY e.rok) AS mzda_minuly_rok,
-        c.prumerna_cena_potravin_czk,
-        LAG(c.prumerna_cena_potravin_czk) OVER (ORDER BY e.rok) AS cena_minuly_rok
-    FROM cr_eko e
+        h.rok,
+        h.mezirocni_zmena_hdp_pct,
+        (m.prumerna_mzda_czk / NULLIF(LAG(m.prumerna_mzda_czk) OVER (ORDER BY h.rok), 0) - 1) * 100 AS mezirocni_zmena_mzdy_pct,
+        (c.prumerna_cena_potravin_czk / NULLIF(LAG(c.prumerna_cena_potravin_czk) OVER (ORDER BY h.rok), 0) - 1) * 100 AS mezirocni_zmena_cen_pct
+    FROM cr_hdp h
     JOIN cr_mzda m
-        ON m.rok = e.rok
+        ON m.rok = h.rok
     JOIN cr_cena c
-        ON c.rok = e.rok
+        ON c.rok = h.rok
 ),
-
-mezirocne AS (
+posun AS (
     SELECT
         rok,
-        ((hdp - hdp_minuly_rok) / NULLIF(hdp_minuly_rok, 0) * 100) AS mezirocni_zmena_hdp_pct,
-        ((prumerna_mzda_czk - mzda_minuly_rok) / NULLIF(mzda_minuly_rok, 0) * 100) AS mezirocni_zmena_mzdy_pct,
-        ((prumerna_cena_potravin_czk - cena_minuly_rok) / NULLIF(cena_minuly_rok, 0) * 100) AS mezirocni_zmena_cen_pct
+        mezirocni_zmena_hdp_pct,
+        mezirocni_zmena_mzdy_pct,
+        mezirocni_zmena_cen_pct,
+        LEAD(mezirocni_zmena_mzdy_pct) OVER (ORDER BY rok) AS mezirocni_zmena_mzdy_pct_dalsi_rok,
+        LEAD(mezirocni_zmena_cen_pct) OVER (ORDER BY rok) AS mezirocni_zmena_cen_pct_dalsi_rok
     FROM spojene
-    WHERE hdp_minuly_rok IS NOT NULL AND mzda_minuly_rok IS NOT NULL AND cena_minuly_rok IS NOT NULL
 )
 SELECT
-    rok,
-    ROUND(mezirocni_zmena_hdp_pct::numeric, 2) AS mezirocni_zmena_hdp_pct,
-    ROUND(mezirocni_zmena_mzdy_pct::numeric, 2) AS mezirocni_zmena_mzdy_pct,
-    ROUND(mezirocni_zmena_cen_pct::numeric, 2) AS mezirocni_zmena_cen_pct,
-    -- Posun o 1 rok (HDP v roce t vs mzdy/ceny v roce t+1)
-    ROUND(LEAD(mezirocni_zmena_mzdy_pct) OVER (ORDER BY rok)::numeric, 2) AS mezirocni_zmena_mzdy_pct_dalsi_rok,
-    ROUND(LEAD(mezirocni_zmena_cen_pct) OVER (ORDER BY rok)::numeric, 2) AS mezirocni_zmena_cen_pct_dalsi_rok
-FROM mezirocne
-ORDER BY rok;
+    ROUND(CORR(mezirocni_zmena_hdp_pct, mezirocni_zmena_mzdy_pct)::numeric, 3) AS corr_hdp_mzdy_stejny_rok,
+    ROUND(CORR(mezirocni_zmena_hdp_pct, mezirocni_zmena_cen_pct)::numeric, 3) AS corr_hdp_ceny_stejny_rok,
+    ROUND(CORR(mezirocni_zmena_hdp_pct, mezirocni_zmena_mzdy_pct_dalsi_rok)::numeric, 3) AS corr_hdp_mzdy_dalsi_rok,
+    ROUND(CORR(mezirocni_zmena_hdp_pct, mezirocni_zmena_cen_pct_dalsi_rok)::numeric, 3) AS corr_hdp_ceny_dalsi_rok
+FROM posun
+WHERE mezirocni_zmena_hdp_pct IS NOT NULL;

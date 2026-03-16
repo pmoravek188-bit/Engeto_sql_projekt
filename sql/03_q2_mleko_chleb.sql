@@ -17,7 +17,7 @@ WITH zaklad AS (
         jednotka,
         prumerna_cena_czk,
         kupni_sila_jednotek
-    FROM t_Patrik_Moravek_project_SQL_primary_final
+    FROM data_academy_content.t_Patrik_Moravek_project_SQL_primary_final
     WHERE kod_odvetvi IS NULL -- Všechna odvětví
 ),
 prvni_posledni AS (
